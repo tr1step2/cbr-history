@@ -32,3 +32,27 @@ cbr::CurrencyDataContainerSPtr cbr::XmlParser::parse(const char * file_name)
 
     return data_container;
 }
+
+cbr::CurrencyListSPtr cbr::XmlParser::parse_currency_list(const char *file_name)
+{
+    pugi::xml_document doc;
+    pugi::xml_parse_result res = doc.load_file(filename);
+
+    if (!res)
+        throw std::runtime_error(res.description());
+
+    cbr::CurrencyListSPtr currency_list(new cbr::CurrencyList);
+
+    auto valutes = doc.child("ValCurs");
+    for (const auto & v : valutes)
+    {
+        cbr::CurrencySPtr currency(new cbr::Currency(v.attribute("ID").value(),
+                                                     v.child("NumCode").child_value(),
+                                                     v.child("CharCode").child_value(),
+                                                     v.child("Name").child_value()));
+
+        currency_list.currency_list.insert(std::make_pair(currency->char_code, currency));
+    }
+
+    return currency_list;
+}

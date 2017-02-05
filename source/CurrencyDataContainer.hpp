@@ -13,5 +13,11 @@ struct CurrencyDataContainer
     double max_value;
 };
 
+struct CurrencyList
+{
+    std::map<std::string, Currency> currency_list;
+};
+
 using CurrencyDataContainerSPtr = std::shared_ptr<CurrencyDataContainer>;
+using CurrencyListSPtr = std::shared_ptr<CurrencyList>;
 } // ns cbr
