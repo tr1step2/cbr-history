@@ -1,6 +1,6 @@
 #include <boost/algorithm/string/replace.hpp>
 
-#include "CbrHistory.hpp"
+#include "HistoryManager.hpp"
 #include "CurrencyDataContainer.hpp"
 #include "CurrencyList.hpp"
 #include "CurrencyDownloader.hpp"

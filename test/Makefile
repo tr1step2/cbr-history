@@ -1,2 +1,2 @@
 all:
-		g++ main.cpp -std=c++11 -L../build -lcbr-hist -Wl,-rpath,../build
+	g++ main.cpp -std=c++11 -L../lib -lhistmgr -Wl,-rpath,../lib:.:./lib

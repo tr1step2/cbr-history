@@ -1,15 +1,9 @@
 #include <iostream>
-#include <exception>
-#include <stdexcept>
 
-#include "../source/CbrHistory.hpp"
+#include "../source/HistoryManager.hpp"
 
 void parse_arguments(int argc, char **argv, std::string & char_code, std::string & start_date, std::string & end_date)
 {
-    if (argc < 4)
-        throw std::runtime_error("Wrong arguments amount. Format: \n"
-                                 "./a.out char_code start_date end_date");
-
     char_code = argv[1];
     start_date = argv[2];
     end_date = argv[3];
