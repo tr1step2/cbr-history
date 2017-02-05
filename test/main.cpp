@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../source/HistoryManager.hpp"
+#include "../include/HistoryManager.hpp"
 
 void parse_arguments(int argc, char **argv, std::string & char_code, std::string & start_date, std::string & end_date)
 {

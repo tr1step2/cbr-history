@@ -5,6 +5,8 @@ project(${project} C CXX)
 
 FILE(GLOB SOURCES source/*.cpp source/*.hpp)
 
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
 add_library(${project} SHARED ${SOURCES})
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
