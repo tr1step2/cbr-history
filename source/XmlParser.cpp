@@ -10,7 +10,8 @@
 #include "CurrencyList.hpp"
 #include "Currency.hpp"
 
-cbr::CurrencyDataContainerSPtr cbr::XmlParser::parse(const char * file_name)
+cbr::CurrencyDataContainerSPtr cbr::XmlParser::parse_currency_history(
+        const char * file_name)
 {
     pugi::xml_document doc;
     auto result = doc.load_file(file_name);
@@ -30,7 +31,7 @@ cbr::CurrencyDataContainerSPtr cbr::XmlParser::parse(const char * file_name)
                                                          val.child("Nominal").child_value(),
                                                          value.c_str()));
 
-        data_container->currency_data.insert(std::make_pair(data->date, data));
+        data_container->insert(std::make_pair(data->date, data));
     }
 
     return data_container;
@@ -39,7 +40,7 @@ cbr::CurrencyDataContainerSPtr cbr::XmlParser::parse(const char * file_name)
 cbr::CurrencyListSPtr cbr::XmlParser::parse_currency_list(const char * file_name)
 {
     pugi::xml_document doc;
-    pugi::xml_parse_result res = doc.load_file(filename);
+    pugi::xml_parse_result res = doc.load_file(file_name);
 
     if (!res)
         throw std::runtime_error(res.description());
@@ -54,7 +55,7 @@ cbr::CurrencyListSPtr cbr::XmlParser::parse_currency_list(const char * file_name
                                                      v.child("CharCode").child_value(),
                                                      v.child("Name").child_value()));
 
-        currency_list.currency_list.insert(std::make_pair(currency->char_code, currency));
+        currency_list->insert(std::make_pair(currency->char_code, currency));
     }
 
     return currency_list;

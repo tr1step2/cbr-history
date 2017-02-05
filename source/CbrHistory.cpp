@@ -31,7 +31,7 @@ cbr::CurrencyDataContainerSPtr cbr::HistoryManager::get_last_request_data()
     return m_last_data;
 }
 
-std::string cbr::HistoryManager::prepare_currency_url(const char * char_code,
+std::string cbr::HistoryManager::prepare_currency_url(const char * currency_id,
                                                       const char * start_date,
                                                       const char * end_date)
 {
@@ -39,12 +39,12 @@ std::string cbr::HistoryManager::prepare_currency_url(const char * char_code,
     std::string request = currency_request_template;
     boost::replace_first(request, "{{start_date}}", start_date);
     boost::replace_first(request, "{{end_date}}", end_date);
-    boost::replace_first(request, "{{valute_id}}", valute->second.id);
+    boost::replace_first(request, "{{valute_id}}", currency_id);
 
     return request;
 }
 
-std::string cbr::HistoryManager::prepare_graph_url(const char * char_code,
+std::string cbr::HistoryManager::prepare_graph_url(const char * currency_id,
                                                    const char * start_date,
                                                    const char * end_date)
 {
@@ -52,15 +52,13 @@ std::string cbr::HistoryManager::prepare_graph_url(const char * char_code,
     std::string request = graph_request_template;
     boost::replace_first(request, "{{start_date}}", start_date);
     boost::replace_first(request, "{{end_date}}", end_date);
-    boost::replace_first(request, "{{valute_id}}", valute->second.id);
+    boost::replace_first(request, "{{valute_id}}", currency_id);
 
     return request;
 }
 
-void cbr::HistoryManager::get_history_impl(const char * char_code,
-                                           const char * start_date,
-                                           const char * end_date,
-                                           const char * out_file_name)
+cbr::CurrencyDataContainerSPtr cbr::HistoryManager::get_history_impl(const char * char_code,
+    const char * start_date, const char * end_date, const char * out_file_name)
 {
     cbr::CurrencyDownloader downloader;
 
@@ -68,7 +66,8 @@ void cbr::HistoryManager::get_history_impl(const char * char_code,
     downloader.download_file(url.c_str(), out_file_name);
 
     cbr::XmlParser parser;
-    cbr::CurrencyDataContainerSPtr data_container = parser.parse(out_file_name);
+    cbr::CurrencyDataContainerSPtr data_container =
+            parser.parse_currency_history(out_file_name);
 
     m_last_data = data_container;
     return data_container;

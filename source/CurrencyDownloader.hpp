@@ -17,7 +17,8 @@ struct CurrencyDownloader
     void download_file(const char * url, const char * out_file_name);
 
 private:
-    void callback_bin_data(char * ptr, size_t size, size_t nmemb, const void * filename);
+    static size_t callback_bin_data(char * ptr, size_t size, size_t nmemb,
+                                    const void * out_file_name);
 };
 
 } // ns cbr

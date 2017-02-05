@@ -41,11 +41,11 @@ private:
                                                const char * end_date,
                                                const char * out_file_name);
 
-    std::string prepare_currency_url(const char * char_code,
+    std::string prepare_currency_url(const char * currency_id,
                                      const char * start_date,
                                      const char * end_date);
 
-    std::string prepare_graph_url(const char * char_code,
+    std::string prepare_graph_url(const char * currency_id,
                                   const char * start_date,
                                   const char * end_date);
     CurrencyListSPtr download_currency_list();
