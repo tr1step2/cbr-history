@@ -1,3 +1,5 @@
+#pragma once
+
 #include <memory>
 #include <map>
 
@@ -6,11 +8,9 @@
 namespace cbr
 {
 
-struct CurrencyList
-{
-    std::map<std::string, CurrencySPtr> currency;
-};
+using CurrencyList = std::map<std::string, CurrencySPtr>;
+using CurrencyListSPtr = std::shared_ptr<CurrencyList>;
 
 } //ns cbr
 
-using CurrencyListSPtr = std::shared_ptr<CurrencyList>;
+

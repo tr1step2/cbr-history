@@ -1,3 +1,5 @@
+#pragma once
+
 #include <memory>
 #include <map>
 
@@ -6,18 +8,7 @@
 namespace cbr
 {
 
-struct CurrencyDataContainer
-{
-    std::map<std::string, CurrencyDataSPtr> currency_data;
-    double min_value;
-    double max_value;
-};
-
-struct CurrencyList
-{
-    std::map<std::string, Currency> currency_list;
-};
-
+using CurrencyDataContainer = std::map<std::string, CurrencyDataSPtr>;
 using CurrencyDataContainerSPtr = std::shared_ptr<CurrencyDataContainer>;
-using CurrencyListSPtr = std::shared_ptr<CurrencyList>;
+
 } // ns cbr

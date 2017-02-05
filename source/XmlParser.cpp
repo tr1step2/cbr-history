@@ -5,7 +5,10 @@
 #include <boost/algorithm/string/replace.hpp>
 
 #include "XmlParser.hpp"
+#include "CurrencyDataContainer.hpp"
 #include "CurrencyData.hpp"
+#include "CurrencyList.hpp"
+#include "Currency.hpp"
 
 cbr::CurrencyDataContainerSPtr cbr::XmlParser::parse(const char * file_name)
 {
@@ -33,7 +36,7 @@ cbr::CurrencyDataContainerSPtr cbr::XmlParser::parse(const char * file_name)
     return data_container;
 }
 
-cbr::CurrencyListSPtr cbr::XmlParser::parse_currency_list(const char *file_name)
+cbr::CurrencyListSPtr cbr::XmlParser::parse_currency_list(const char * file_name)
 {
     pugi::xml_document doc;
     pugi::xml_parse_result res = doc.load_file(filename);

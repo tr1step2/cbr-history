@@ -1,6 +1,9 @@
+#pragma once
+
 #include <memory>
 
 #include "CurrencyDataContainer.hpp"
+#include "CurrencyList.hpp"
 
 extern "C"
 {
@@ -31,7 +34,7 @@ struct HistoryManager
     CurrencyDataContainerSPtr get_last_request_data();
 
 private:
-    bool check_char_code(const char * char_code);
+    std::string get_currency_id(const char * char_code);
 
     CurrencyDataContainerSPtr get_history_impl(const char * char_code,
                                                const char * start_date,
@@ -45,7 +48,7 @@ private:
     std::string prepare_graph_url(const char * char_code,
                                   const char * start_date,
                                   const char * end_date);
-    void download_currency_list();
+    CurrencyListSPtr download_currency_list();
 
 private:
 
