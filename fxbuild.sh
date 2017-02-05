@@ -8,4 +8,7 @@ cd build
 cmake ..
 make
 
+cd ../test
+make
+
 cd ..
