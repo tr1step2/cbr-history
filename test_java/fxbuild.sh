@@ -1,10 +1,12 @@
 #!/bin/sh
 
-javac CbrCBRHistory.java
+javac CBRHistory.java
 javac NativeCaller.java
 
-rm -rf build
-mkdir build
+if [ ! -d "build" ]; then
+  mkdir build
+fi
+
 cd build
 
 cmake ..

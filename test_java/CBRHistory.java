@@ -9,13 +9,20 @@ public class CBRHistory
 
     public static void main(String[] args)
     {
-/*
-        String char_code = args[0];
-        String start_date = args[1];
-        String end_date = args[2];
+        String char_code = "USD";
+        String start_date = "01.01.2016";
+        String end_date = "01.02.2016";
         String file_name = "java_forex.xml";
-*/
+
+        if (args.length >= 4)
+        {
+            char_code = args[0];
+            start_date = args[1];
+            end_date = args[2];
+            file_name = args[3];  
+        }
+
 		NativeCaller caller = new NativeCaller();
-        caller.callHistory("USD", "01.01.2016", "01.01.2017", "forex_java_out.xml");
+        caller.callHistory(char_code, start_date, end_date, file_name);
 	}
 }

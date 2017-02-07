@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java java -Djava.library.path=`pwd` CBRHistory
+java -Djava.library.path=`pwd` CBRHistory "$@"
