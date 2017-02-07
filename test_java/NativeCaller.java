@@ -3,7 +3,7 @@ class NativeCaller
 {
     static
     {
-        System.loadLibrary("libNativeCaller");
+        System.loadLibrary("NativeCaller");
     }
 
     // обращаем внимание на слово native
