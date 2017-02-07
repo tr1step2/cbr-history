@@ -10,8 +10,8 @@ public class CBRHistory
     public static void main(String[] args)
     {
         String char_code = "USD";
-        String start_date = "01.01.2016";
-        String end_date = "01.02.2016";
+        String start_date = "01.01.2017";
+        String end_date = "01.02.2017";
         String file_name = "java_forex.xml";
 
         if (args.length >= 4)
@@ -25,5 +25,10 @@ public class CBRHistory
 		NativeCaller caller = new NativeCaller();
         CurrencyDataContainer data = 
             caller.callHistory(char_code, start_date, end_date, file_name);
+
+        for(Map.Entry<String, CurrencyData> el : data.get_all().entrySet())
+        {
+            System.out.println(el.getKey() + "/" + el.getValue());
+        }
 	}
 }
