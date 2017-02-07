@@ -10,9 +10,9 @@ extern "C" {
 /*
  * Class:     NativeCaller
  * Method:    callHistory
- * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)LCurrencyDataContainer;
  */
-JNIEXPORT void JNICALL Java_NativeCaller_callHistory
+JNIEXPORT jobject JNICALL Java_NativeCaller_callHistory
   (JNIEnv *, jobject, jstring, jstring, jstring, jstring);
 
 #ifdef __cplusplus

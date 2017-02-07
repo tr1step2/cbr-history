@@ -1,5 +1,7 @@
 #!/bin/sh
 
+javac CurrencyData.java
+javac CurrencyDataContainer.java
 javac CBRHistory.java
 javac NativeCaller.java
 

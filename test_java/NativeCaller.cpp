@@ -6,7 +6,12 @@
 
 #include "HistoryManager.hpp"
 
-JNIEXPORT void JNICALL Java_NativeCaller_callHistory
+inline void println(const char *msg)
+{
+    std::cout << msg << std::endl;
+}
+
+JNIEXPORT jobject JNICALL Java_NativeCaller_callHistory
   (JNIEnv *env, jobject obj, jstring j_char_code, jstring j_start_date, 
     jstring j_end_date, jstring j_file_out)
 {
@@ -21,8 +26,59 @@ JNIEXPORT void JNICALL Java_NativeCaller_callHistory
                                                                 start_date_ptr,
                                                                 end_date_ptr,
                                                                 file_out_ptr);
+
+    std::cout << "HISTORY LOADED" << std::endl;
+
+    //Creating Currency Data Container and call constructor
+    jclass container_data_class = env->FindClass("CurrencyDataContainer");
+    if (container_data_class == 0)
+        println("Can't find class CurrencyDataContainer");
+
+    jmethodID container_data_init_id = env->GetMethodID(container_data_class, 
+        "<init>", "()V");  
+    if (container_data_init_id == 0)
+        println("Can't find method <init> ()V of class CurrencyDataContainer");
+
+    jobject data_container = env->NewObject(container_data_class, container_data_init_id);
+    if (data_container == 0)
+        println("Can't create new CurrencyDataContainer with spec constructor");
+
+    //get add data method id
+    jmethodID container_data_add_id = env->GetMethodID(container_data_class, "add",
+        "(LCurrencyData;)V");
+    if (container_data_add_id == 0)
+        println("Can't find method add (LCurrencyData;)V of CurrencyDataContainer");
+
+    jclass data_class = env->FindClass("CurrencyData");
+    if (data_class == 0)
+        println("Can't find CurrencyData class");
+
+    jmethodID data_init_id = env->GetMethodID(data_class, "<init>", 
+        "(Ljava/lang/String;SD)V");
+    if (data_init_id == 0)
+        println("Can't find method <init> (Ljava/lang/String;SD)V of CurrencyData");
+
+    println("INIT 1 COMPLETE");
+
     for(const auto & cur : *result)
-        std::cout << cur.first << " " << cur.second->value << std::endl;
+    {
+        jstring j_date = env->NewStringUTF(cur.second->date.c_str());
+        jshort j_nominal = cur.second->nominal;
+        jdouble j_value = cur.second->value;
+
+        if (j_date == 0 || j_nominal == 0 || j_value == 0)
+            println("Some value is empty");
+
+        jobject j_currency_data = env->NewObject(data_class, data_init_id, 
+            j_date, j_nominal, j_value);
+
+        if (j_currency_data == 0)
+            println("Can't create object CurrencyData");
+
+        println("INIT 2 COMPLETE");
+
+        env->CallVoidMethod(data_container, container_data_add_id, j_currency_data);
+    }
 
     env->ReleaseStringUTFChars(j_char_code, char_code_ptr);
     env->ReleaseStringUTFChars(j_start_date, start_date_ptr);

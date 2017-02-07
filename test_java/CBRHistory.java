@@ -23,6 +23,7 @@ public class CBRHistory
         }
 
 		NativeCaller caller = new NativeCaller();
-        caller.callHistory(char_code, start_date, end_date, file_name);
+        CurrencyDataContainer data = 
+            caller.callHistory(char_code, start_date, end_date, file_name);
 	}
 }
