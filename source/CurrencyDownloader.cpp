@@ -44,3 +44,8 @@ size_t cbr::CurrencyDownloader::callback_bin_data(char * ptr, size_t size,
 
     return size * nmemb;
 }
+
+cbr::CurrencyDownloader::~CurrencyDownloader()
+{
+    curl_global_cleanup();
+}

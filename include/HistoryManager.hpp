@@ -61,8 +61,6 @@ private:
 private:
     CurrencyDataContainerSPtr m_last_data;
 
-
-
 };
 
 } //ns cbr
