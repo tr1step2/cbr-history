@@ -21,6 +21,7 @@ void cbr::CurrencyDownloader::download_file(const char * url, const char * out_f
         throw std::runtime_error("Some errors caught due http request.");
 
     curl_easy_cleanup(chandle);
+
 }
 
 size_t cbr::CurrencyDownloader::callback_bin_data(char * ptr, size_t size,
@@ -43,4 +44,9 @@ size_t cbr::CurrencyDownloader::callback_bin_data(char * ptr, size_t size,
         file_out.write(ptr, nmemb * size);
 
     return size * nmemb;
+}
+
+cbr::CurrencyDownloader::~CurrencyDownloader()
+{
+    curl_global_cleanup();
 }

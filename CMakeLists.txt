@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 set(project histmgr)
 project(${project} C CXX)
 
-FILE(GLOB SOURCES source/*.cpp source/*.hpp)
+FILE(GLOB SOURCES source/*.cpp source/*.hpp include/*.hpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
