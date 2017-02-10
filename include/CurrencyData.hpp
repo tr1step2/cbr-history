@@ -4,6 +4,8 @@
 #include <memory>
 #include <cstdint>
 
+#include <boost/date_time.hpp>
+
 namespace cbr
 {
 
@@ -12,7 +14,7 @@ struct CurrencyData
     CurrencyData(const char * date, const char * nominal, const char * value);
 
 public:
-    std::string date;
+    boost::gregorian::date date;
     uint16_t nominal;
     double value;
 };

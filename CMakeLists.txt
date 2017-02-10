@@ -15,5 +15,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_compile_options(${project} PRIVATE "-std=c++11")
 
 target_link_libraries(${project}   curl 
-                                            pugixml
+                                   pugixml
+                                   boost_date_time
 )
