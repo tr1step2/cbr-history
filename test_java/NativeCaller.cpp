@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <iostream>
+#include <boost/date_time.hpp>
 
 #include "HistoryManager.hpp"
 
@@ -35,8 +36,7 @@ JNIEXPORT jobject JNICALL Java_NativeCaller_callHistory
     jmethodID container_data_init_id = env->GetMethodID(container_data_class, 
         "<init>", "()V");  
 
-    jobject j_data_container_local = env->NewObject(container_data_class, container_data_init_id);
-    jobject j_data_container = env->NewGlobalRef(j_data_container_local);
+    jobject j_data_container = env->NewObject(container_data_class, container_data_init_id);
 
     //get add data method id
     jmethodID container_data_add_id = env->GetMethodID(container_data_class, "add",
@@ -46,10 +46,10 @@ JNIEXPORT jobject JNICALL Java_NativeCaller_callHistory
     jmethodID data_init_id = env->GetMethodID(data_class, "<init>", 
         "(Ljava/lang/String;SD)V");
 
-    for(const auto & cur : *result)
+    for (const auto & cur : *result)
     {
-        jstring j_date = env->NewStringUTF(cur.second->date.c_str());
-        //jstring j_date = env->NewGlobalRef(j_date_local);
+        std::string tmp_date_str = boost::gregorian::to_simple_string(cur.second->date);
+        jstring j_date = env->NewStringUTF(tmp_date_str.c_str());
 
         jshort j_nominal = cur.second->nominal;
         jdouble j_value = cur.second->value;
@@ -57,9 +57,8 @@ JNIEXPORT jobject JNICALL Java_NativeCaller_callHistory
         if (j_date == 0 || j_nominal == 0 || j_value == 0)
             println("Some value is empty");
 
-        jobject j_currency_data_local = env->NewObject(data_class, data_init_id,
+        jobject j_currency_data = env->NewObject(data_class, data_init_id,
             j_date, j_nominal, j_value);
-        jobject j_currency_data = env->NewGlobalRef(j_currency_data_local);
 
         env->CallVoidMethod(j_data_container, container_data_add_id, j_currency_data);
     }
