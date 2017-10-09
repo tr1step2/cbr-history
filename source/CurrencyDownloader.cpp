@@ -31,24 +31,57 @@ void cbr::CurrencyDownloader::download_file(const char * url_path, const char * 
 	//send request
 	boost::asio::write(m_socket, request);
 
-	//read response status and headers
-	boost::asio::streambuf response;
-	boost::asio::read_until( m_socket, response, "\r\n\r\n" );
-	std::istream response_stream(&response);
+	//read response. 
+	// [0] status string
+	// [1] headers
+	// [2] bosy
+	std::vector<std::string> response = readAllData();
+	if ( response.size() != 3 )
+		throw std::runtime_error("Error in response structure.");
 
-	check_response_status(response);
+	check_response_status(response[0]);
 
-	//wrute response data to file
+	//write response data to file
 	std::ofstream file(out_file_name, std::ios_base::out | std::ios_base::ate);
 	if (!file)
 		throw std::runtime_error(std::string("Can't open file ") + out_file_name + " for Write.");
 
-	boost::system::error_code error;
-	while (boost::asio::read(m_socket, response, boost::asio::transfer_at_least(1), error))
-		file << &response;
+	file << response[2];
+}
 
-	if (error != boost::asio::error::eof)
-		throw boost::system::system_error(error);
+std::vector<std::string> cbr::CurrencyDownloader::readAllData()
+{
+	boost::asio::streambuf resp;
+	boost::system::error_code err;
+
+	boost::asio::read(m_socket, resp, err);
+	if ( err != boost::asio::error::eof )
+		throw boost::system::system_error( err );
+
+	std::stringstream ss;
+	ss << &resp;
+	std::string str = ss.str();	
+
+	auto statusEnd = str.find("\r\n");
+	if ( std::string::npos == statusEnd )
+		throw std::runtime_error( "Wrong answer structure. Can't find status line end." );
+
+	std::vector<std::string> result;
+	result.push_back( str.substr( 0, statusEnd ) );
+
+	auto headersEnd = str.find("\r\n\r\n");
+	if ( std::string::npos == headersEnd )
+		throw std::runtime_error( "Wrong answer structure. Can't find headers end." );
+
+	result.push_back( str.substr( statusEnd + 2, headersEnd ) );
+
+	auto bodyEnd = str.find_last_of( "\r\n\r\n" );
+	if ( std::string::npos == bodyEnd )
+		throw std::runtime_error( "Wrong answer structure. Can't find headers end." );
+
+	result.push_back( str.substr(headersEnd + 4, bodyEnd) );
+
+	return result;
 }
 
 void cbr::CurrencyDownloader::make_request( std::ostream & request_stream, const char * url_path )
@@ -59,36 +92,22 @@ void cbr::CurrencyDownloader::make_request( std::ostream & request_stream, const
 	request_stream << "Connection: close\r\n\r\n";
 }
 
-void cbr::CurrencyDownloader::check_response_status(boost::asio::streambuf & response)
-{
-	std::istream response_stream(&response);
+void cbr::CurrencyDownloader::check_response_status(const std::string & response)
+{	
+	std::stringstream response_stream( response );
 
 	std::string http_version;
-	response_stream >> http_version;
+	response_stream >> http_version;	
 
 	size_t code;
 	response_stream >> code;
 
 	std::string message;
-	response_stream >> message;
+	std::getline( response_stream, message );
 
 	if (code != 200)
 	{
 		throw std::runtime_error(std::string("Error occured while http request. Code ")
 			+ std::to_string(code) + ". Message: " + message);
 	}
-}
-
-void cbr::CurrencyDownloader::DEBUG_FILE( io_tcp::socket & socket, boost::asio::streambuf & response )
-{
-	std::ofstream file( "debug_file.txt", std::ios_base::out | std::ios_base::ate );
-	if ( !file )
-		throw std::runtime_error( "Can't open file debug_file.txt for Write." );
-
-	//write result to file
-	boost::system::error_code error;
-	while ( boost::asio::read( socket, response, boost::asio::transfer_at_least( 1 ), error ) )
-		file << &response;
-
-	throw std::runtime_error( "DEBUG FUNCTION USED" );
 }

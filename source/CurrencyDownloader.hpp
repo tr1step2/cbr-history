@@ -18,11 +18,10 @@ struct CurrencyDownloader
 
 private:
 	void create_connection();
-	void check_response_status(boost::asio::streambuf & response);
+	void check_response_status(const std::string & response);
 	void make_request( std::ostream & request_stream, const char * url_path );
 
-
-	void DEBUG_FILE( boost::asio::ip::tcp::socket & socket, boost::asio::streambuf & response );
+	std::vector<std::string> readAllData();
 private:
 	std::string m_host;
 	boost::asio::io_service m_io_service;
