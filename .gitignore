@@ -1,3 +1,12 @@
+Debug/
+Release/
+X64/
+ipch/
+
+cbr-history.opensdf
+cbr-history.sdf
+cbr-history.v12.suo
+
 .vs
 *.tmp
 *~
