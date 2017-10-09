@@ -60,10 +60,10 @@ std::string cbr::HistoryManager::prepare_graph_url(const char * currency_id,
 cbr::CurrencyDataContainerSPtr cbr::HistoryManager::get_history_impl(const char * char_code,
     const char * start_date, const char * end_date, const char * out_file_name)
 {
-    cbr::CurrencyDownloader downloader;
+    cbr::CurrencyDownloader downloader(m_host);
 
     std::string url_path = prepare_currency_url(char_code, start_date, end_date);
-    downloader.download_file(m_host, url_path.c_str(), out_file_name);
+    downloader.download_file(url_path.c_str(), out_file_name);
 
     cbr::XmlParser parser;
     cbr::CurrencyDataContainerSPtr data_container =
@@ -76,9 +76,9 @@ cbr::CurrencyDataContainerSPtr cbr::HistoryManager::get_history_impl(const char 
 cbr::CurrencyListSPtr cbr::HistoryManager::download_currency_list()
 {
     const char * list_file_name = "currency_list.xml";
-    cbr::CurrencyDownloader downloader;
+    cbr::CurrencyDownloader downloader(m_host);
 
-    downloader.download_file(m_host, m_currency_list_request_template, list_file_name);
+    downloader.download_file(m_currency_list_request_template, list_file_name);
 
     cbr::XmlParser parser;
     cbr::CurrencyListSPtr currency_list = parser.parse_currency_list(list_file_name);
