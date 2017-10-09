@@ -1,4 +1,4 @@
-#include <boost/algorithm/string/replace.hpp>
+#include "stdafx.h"
 
 #include "HistoryManager.hpp"
 #include "CurrencyDataContainer.hpp"
@@ -36,7 +36,7 @@ std::string cbr::HistoryManager::prepare_currency_url(const char * currency_id,
                                                       const char * end_date)
 {
     //prepare request for getting data for specified period and valute
-    std::string request = currency_request_template;
+    std::string request = m_currency_request_template;
     boost::replace_first(request, "{{start_date}}", start_date);
     boost::replace_first(request, "{{end_date}}", end_date);
     boost::replace_first(request, "{{valute_id}}", currency_id);
@@ -49,7 +49,7 @@ std::string cbr::HistoryManager::prepare_graph_url(const char * currency_id,
                                                    const char * end_date)
 {
     //prepare request for getting data for specified period and valute
-    std::string request = graph_request_template;
+    std::string request = m_graph_request_template;
     boost::replace_first(request, "{{start_date}}", start_date);
     boost::replace_first(request, "{{end_date}}", end_date);
     boost::replace_first(request, "{{valute_id}}", currency_id);
@@ -62,8 +62,8 @@ cbr::CurrencyDataContainerSPtr cbr::HistoryManager::get_history_impl(const char 
 {
     cbr::CurrencyDownloader downloader;
 
-    std::string url = prepare_currency_url(char_code, start_date, end_date);
-    downloader.download_file(url.c_str(), out_file_name);
+    std::string url_path = prepare_currency_url(char_code, start_date, end_date);
+    downloader.download_file(m_host, url_path.c_str(), out_file_name);
 
     cbr::XmlParser parser;
     cbr::CurrencyDataContainerSPtr data_container =
@@ -78,7 +78,7 @@ cbr::CurrencyListSPtr cbr::HistoryManager::download_currency_list()
     const char * list_file_name = "currency_list.xml";
     cbr::CurrencyDownloader downloader;
 
-    downloader.download_file(currency_list_request_template, list_file_name);
+    downloader.download_file(m_host, m_currency_list_request_template, list_file_name);
 
     cbr::XmlParser parser;
     cbr::CurrencyListSPtr currency_list = parser.parse_currency_list(list_file_name);

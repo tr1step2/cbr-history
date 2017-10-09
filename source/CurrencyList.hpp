@@ -1,8 +1,5 @@
 #pragma once
 
-#include <memory>
-#include <map>
-
 #include "Currency.hpp"
 
 namespace cbr

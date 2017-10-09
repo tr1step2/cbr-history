@@ -1,9 +1,4 @@
-#include <exception>
-#include <stdexcept>
-
-#include "boost/property_tree/ptree.hpp"
-#include "boost/property_tree/xml_parser.hpp"
-#include <boost/algorithm/string/replace.hpp>
+#include "stdafx.h"
 
 #include "XmlParser.hpp"
 #include "CurrencyDataContainer.hpp"

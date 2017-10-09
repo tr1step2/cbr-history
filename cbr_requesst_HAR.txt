@@ -1,0 +1,149 @@
+{
+  "log": {
+    "version": "1.2",
+    "creator": {
+      "name": "WebInspector",
+      "version": "537.36"
+    },
+    "pages": [
+      {
+        "startedDateTime": "2017-10-08T10:44:31.420Z",
+        "id": "page_4",
+        "title": "http://cbr.ru/scripts/XML_dynamic.asp?date_req1=01.01.2017&datete_req2=31.12.2017&VAL_NM_RQ=R01239",
+        "pageTimings": {
+          "onContentLoad": 128.49600007757545,
+          "onLoad": 161.37500014156103
+        }
+      }
+    ],
+    "entries": [
+      {
+        "startedDateTime": "2017-10-08T10:44:31.417Z",
+        "time": 45.99696104368195,
+        "request": {
+          "method": "GET",
+          "url": "http://cbr.ru/scripts/XML_dynamic.asp?date_req1=01.01.2017&datete_req2=31.12.2017&VAL_NM_RQ=R01239",
+          "httpVersion": "HTTP/1.1",
+          "headers": [
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip, deflate"
+            },
+            {
+              "name": "Host",
+              "value": "cbr.ru"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "ru,en;q=0.8,en-US;q=0.6"
+            },
+            {
+              "name": "Upgrade-Insecure-Requests",
+              "value": "1"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36 OPR/48.0.2685.35"
+            },
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "max-age=0"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "queryString": [
+            {
+              "name": "date_req1",
+              "value": "01.01.2017"
+            },
+            {
+              "name": "datete_req2",
+              "value": "31.12.2017"
+            },
+            {
+              "name": "VAL_NM_RQ",
+              "value": "R01239"
+            }
+          ],
+          "cookies": [],
+          "headersSize": 511,
+          "bodySize": 0
+        },
+        "response": {
+          "status": 200,
+          "statusText": "OK",
+          "httpVersion": "HTTP/1.1",
+          "headers": [
+            {
+              "name": "Date",
+              "value": "Sun, 08 Oct 2017 10:44:45 GMT"
+            },
+            {
+              "name": "Content-Encoding",
+              "value": "gzip"
+            },
+            {
+              "name": "Server",
+              "value": "nginx/1.11.10"
+            },
+            {
+              "name": "X-Powered-By",
+              "value": "ASP.NET"
+            },
+            {
+              "name": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "name": "Content-Type",
+              "value": "text/xml"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "private"
+            },
+            {
+              "name": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookies": [],
+          "content": {
+            "size": 92,
+            "mimeType": "text/xml",
+            "compression": -19
+          },
+          "redirectURL": "",
+          "headersSize": 249,
+          "bodySize": 111,
+          "_transferSize": 360
+        },
+        "cache": {},
+        "timings": {
+          "blocked": 0.0029609999619424343,
+          "dns": 0,
+          "ssl": -1,
+          "connect": 15.4820000752807,
+          "send": 0.3029999788849995,
+          "wait": 25.303999893367312,
+          "receive": 4.9050000961869955,
+          "_blocked_queueing": 2.9609999619424343
+        },
+        "serverIPAddress": "212.40.192.49",
+        "connection": "3735",
+        "pageref": "page_4"
+      }
+    ]
+  }
+}

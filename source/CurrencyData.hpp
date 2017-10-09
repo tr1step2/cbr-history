@@ -1,11 +1,5 @@
 #pragma once
 
-#include <string>
-#include <memory>
-#include <cstdint>
-
-#include <boost/date_time.hpp>
-
 namespace cbr
 {
 

@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include "stdafx.h"
 
 #include "CurrencyData.hpp"
 

@@ -52,11 +52,12 @@ private:
 
 private:
 
-    const char * currency_request_template = "http://cbr.ru/scripts/XML_dynamic.asp?"
+	const char * m_host = "www.cbr.ru";
+    const char * m_currency_request_template = "/scripts/XML_dynamic.asp?"
             "date_req1={{start_date}}&date_req2={{end_date}}&VAL_NM_RQ={{valute_id}}";
-    const char * graph_request_template = "http://www.cbr.ru/currency_base/GrafGen.aspx?"
+    const char * m_graph_request_template = "/currency_base/GrafGen.aspx?"
             "date_req1={{start_date}}&date_req2={{end_date}}&VAL_NM_RQ={{valute_id}}";
-    const char * currency_list_request_template = "http://cbr.ru/scripts/XML_daily.asp";
+    const char * m_currency_list_request_template = "/scripts/XML_daily.asp";
 
 private:
     CurrencyDataContainerSPtr m_last_data;

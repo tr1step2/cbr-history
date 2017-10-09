@@ -22,6 +22,12 @@
     <ClCompile Include="source\XmlParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Currency.hpp">
@@ -43,6 +49,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="source\XmlParser.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\stdafx.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

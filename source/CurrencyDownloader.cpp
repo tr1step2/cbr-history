@@ -1,51 +1,87 @@
-#include <exception>
-#include <stdexcept>
-#include <fstream>
-#include <set>
-#include <curl/curl.h>
+#include "stdafx.h"
 
 #include "CurrencyDownloader.hpp"
 
-void cbr::CurrencyDownloader::download_file(const char * url, const char * out_file_name)
+using io_tcp = boost::asio::ip::tcp;
+
+void cbr::CurrencyDownloader::download_file(const char * host, const char * url_path, const char * out_file_name)
 {
-    CURL *chandle = curl_easy_init();
-    if (!chandle)
-        throw std::runtime_error("Can't init curl instance");
+	boost::asio::io_service io_service;
 
-    curl_easy_setopt(chandle, CURLOPT_URL, url);
-    curl_easy_setopt(chandle, CURLOPT_WRITEFUNCTION, callback_bin_data);
-    curl_easy_setopt(chandle, CURLOPT_WRITEDATA, out_file_name);
+	io_tcp::resolver resolver(io_service);
+	io_tcp::resolver::query query(host, "http");
+	io_tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
 
-    CURLcode res = curl_easy_perform(chandle);
-    if (CURLE_OK != res)
-        throw std::runtime_error("Some errors caught due http request.");
+	io_tcp::socket socket(io_service);
+	boost::asio::connect(socket, endpoint_iterator);
 
-    curl_easy_cleanup(chandle);
+	boost::asio::streambuf request;
+	std::ostream request_stream(&request);
+
+	boost::asio::write(socket, request);
+
+	boost::asio::streambuf response;
+	boost::system::error_code error;
+
+	boost::asio::read_until(socket, response, "\r\n\r\n");
+	std::istream response_stream(&response);
+
+	DEBUG_FILE(socket, response);
+
+	check_response_status(response);
+
+	std::ofstream file(out_file_name, std::ios_base::out | std::ios_base::ate);
+	if (!file)
+		throw std::runtime_error(std::string("Can't open file ") + out_file_name + " for Write.");
+
+	//write result to file
+	while (boost::asio::read(socket, response, boost::asio::transfer_at_least(1), error))
+		file << &response;
+
+	if (error != boost::asio::error::eof)
+		throw boost::system::system_error(error);
 }
 
-size_t cbr::CurrencyDownloader::callback_bin_data(char * ptr, size_t size,
-                                                  size_t nmemb, const void * out_file_name)
+void cbr::CurrencyDownloader::DEBUG_FILE(io_tcp::socket & socket, boost::asio::streambuf & response)
 {
-    //check is it first call of callback for this file
-    static thread_local std::set<const char *> first_time_files;
-    auto iter = first_time_files.find((const char *)out_file_name);
-    bool first_time = first_time_files.end() == iter;
+	std::ofstream file("debug_file.txt", std::ios_base::out | std::ios_base::ate);
+	if (!file)
+		throw std::runtime_error("Can't open file debug_file.txt for Write.");
 
-    //truncate old file if first time
-    //append to old file if not
-    auto open_mode = first_time ? std::ofstream::trunc : std::ofstream::app;
-    open_mode |= std::ofstream::binary;
+	//write result to file
+	boost::system::error_code error;
+	while (boost::asio::read(socket, response, boost::asio::transfer_at_least(1), error))
+		file << &response;
 
-    first_time_files.insert((const char *)out_file_name);
-
-    std::ofstream file_out(static_cast<const char *>(out_file_name), open_mode);
-    if (file_out)
-        file_out.write(ptr, nmemb * size);
-
-    return size * nmemb;
+	throw std::runtime_error("DEBUG FUNCTION USED");
 }
 
-cbr::CurrencyDownloader::~CurrencyDownloader()
+void make_request(boost::asio::streambuf & request, const char * host, const char * url_path)
 {
-    curl_global_cleanup();
+	std::ostream request_stream(&request);
+
+	request_stream << "GET " << url_path << " HTTP/1.0\r\n";
+	request_stream << "Host: " << host << "\r\n";
+	request_stream << "Accept: */*\r\n";
+	request_stream << "Connection: close\r\n\r\n";
+}
+
+void cbr::CurrencyDownloader::check_response_status(boost::asio::streambuf & response)
+{
+	std::istream response_stream(&response);
+
+	std::string http_version;
+	response_stream >> http_version;
+
+	size_t code;
+	response_stream >> code;
+
+	std::string message;
+	response_stream >> message;
+
+	if (code != 200)
+	{
+		throw std::runtime_error(std::string("Error occured while http request. Code ")
+			+ std::to_string(code) + ". Message: " + message);
+	}
 }

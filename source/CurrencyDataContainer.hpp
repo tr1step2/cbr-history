@@ -1,10 +1,5 @@
 #pragma once
 
-#include <memory>
-#include <map>
-
-#include <boost/date_time.hpp>
-
 #include "CurrencyData.hpp"
 
 namespace cbr
