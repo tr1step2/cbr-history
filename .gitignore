@@ -8,5 +8,6 @@ cbr-history.sdf
 cbr-history.v12.suo
 
 .vs
+*.xml
 *.tmp
 *~
