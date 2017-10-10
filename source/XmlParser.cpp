@@ -25,11 +25,15 @@ cbr::CurrencyDataContainerSPtr cbr::XmlParser::parse_currency_history(
 
 	for (const auto & record : tree.get_child("ValCurs"))
 	{
-		std::string str = record.second.data();
+		if (record.first != "Record")
+			continue;
 
-		cbr::CurrencyDataSPtr data(new cbr::CurrencyData(record.second.get<std::string>("<xmlattr>.Date").c_str(),
-			record.second.get<std::string>("Nominal").c_str(),
-			record.second.get<std::string>("Value").c_str()));
+		auto v = record.second.get_child("Value").data();
+
+		cbr::CurrencyDataSPtr data(new cbr::CurrencyData(
+			record.second.get_child("<xmlattr>.Date").data().c_str(),
+			record.second.get_child("Nominal").data().c_str(),
+			record.second.get_child("Value").data().c_str()));
 
 		data_container->insert(std::make_pair(data->date, data));
 	}
@@ -44,13 +48,15 @@ cbr::CurrencyListSPtr cbr::XmlParser::parse_currency_list(const char * file_name
 	
     cbr::CurrencyListSPtr currency_list(new cbr::CurrencyList);
 
-    for (const auto & rec : tree.get_child("ValCurs"))
+    for (const auto & valute : tree.get_child("ValCurs"))
     {
+		if (valute.first != "Valute")
+			continue;
 
-        cbr::CurrencySPtr currency(new cbr::Currency(rec.second.get<std::string>("<xmlattr>.ID").c_str(),
-                                                     rec.second.get<std::string>("NumCode").c_str(),
-													 rec.second.get<std::string>("CharCode").c_str(),
-													 rec.second.get<std::string>("Name").c_str()));
+        cbr::CurrencySPtr currency(new cbr::Currency(valute.second.get<std::string>("<xmlattr>.ID").c_str(),
+                                                     valute.second.get<std::string>("NumCode").c_str(),
+													 valute.second.get<std::string>("CharCode").c_str(),
+													 valute.second.get<std::string>("Name").c_str()));
 
         currency_list->insert(std::make_pair(currency->char_code, currency));
     }
