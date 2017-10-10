@@ -53,10 +53,10 @@ cbr::CurrencyListSPtr cbr::XmlParser::parse_currency_list(const char * file_name
 		if (valute.first != "Valute")
 			continue;
 
-        cbr::CurrencySPtr currency(new cbr::Currency(valute.second.get<std::string>("<xmlattr>.ID").c_str(),
-                                                     valute.second.get<std::string>("NumCode").c_str(),
-													 valute.second.get<std::string>("CharCode").c_str(),
-													 valute.second.get<std::string>("Name").c_str()));
+        cbr::CurrencySPtr currency(new cbr::Currency(valute.second.get_child("<xmlattr>.ID").data().c_str(),
+                                                     valute.second.get_child("NumCode").data().c_str(),
+													 valute.second.get_child("CharCode").data().c_str(),
+													 valute.second.get_child("Name").data().c_str()));
 
         currency_list->insert(std::make_pair(currency->char_code, currency));
     }
