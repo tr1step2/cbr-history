@@ -10,7 +10,6 @@ void parse_arguments(int argc, char **argv, std::string & char_code, std::string
 
 int main(int argc, char ** argv)
 {
-	const char * daily = "daily.xml";
 	const char * forex = "forex.xml";
 
 	std::string char_code;

@@ -55,4 +55,7 @@
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Jamroot" />
+  </ItemGroup>
 </Project>

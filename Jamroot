@@ -1,0 +1,30 @@
+import os ;
+import pch ;
+
+local BOOST_ROOT_PATH = [ os.environ BOOST_ROOT ] 
+	;
+
+cpp-pch stdafx : 
+	source/stdafx.h 
+	;
+
+exe cbr-history :
+	stdafx
+
+	source/Currency.cpp
+    source/CurrencyData.cpp
+    source/CurrencyDownloader.cpp
+	source/HistoryManager.cpp
+	source/stdafx.cpp
+	source/XmlParser.cpp
+	
+	main.cpp
+
+	$(BOOST_ROOT_PATH)/stage/lib/libboost_system.a
+	$(BOOST_ROOT_PATH)/stage/lib/libboost_regex.a
+	$(BOOST_ROOT_PATH)/stage/lib/libboost_date_time.a
+	:
+	<cxxflags>"-std=c++11"
+	<include>$(BOOST_ROOT_PATH)
+	<include>./source
+	;
