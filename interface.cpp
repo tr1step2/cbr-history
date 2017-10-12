@@ -23,6 +23,9 @@ void MakeError(const std::exception & exc, char ** error)
 	AllocAndCopy(exc.what(), error);
 }
 
+extern "C"
+{
+
 CBRHISTAPI int load_data(const char * char_code, const char * start_date, const char * end_date, char ** error)
 {
 	try
@@ -53,13 +56,17 @@ CBRHISTAPI int get_next(char ** date, char ** value, char ** error)
 	try
 	{
 		if (iter == end)
-			throw std::runtime_error("Last value reached");
+		{
+			return 0;
+		}
 
 		std::string dateStr = boost::lexical_cast<std::string>(iter->first);
 		std::string valueStr = boost::lexical_cast<std::string>(iter->second->value);
 
 		AllocAndCopy(dateStr, date);
-		AllocAndCopy(dateStr, value);
+		AllocAndCopy(valueStr, value);
+
+		++iter;
 	}
 	catch (const std::exception & exc)
 	{
@@ -67,42 +74,8 @@ CBRHISTAPI int get_next(char ** date, char ** value, char ** error)
 		return -1;
 	}
 
-	return 0;
+	return 1;
 }
 
-void parse_arguments(int argc, char **argv, std::string & char_code, std::string & start_date, std::string & end_date)
-{
-	char_code = argv[1];
-	start_date = argv[2];
-	end_date = argv[3];
-}
+} // extern C
 
-int main(int argc, char ** argv)
-{
-	const char * forex = "forex.xml";
-
-	std::string char_code;
-	std::string start_date;
-	std::string end_date;
-
-	try
-	{
-		//get parameters
-		parse_arguments(argc, argv, char_code, start_date, end_date);
-
-		cbr::HistoryManager manager;
-		cbr::CurrencyDataContainerSPtr result = manager.get_history(char_code.c_str(),
-			start_date.c_str(),
-			end_date.c_str(),
-			forex);
-
-		for (const auto & cur : *result)
-		{
-			std::cout << cur.first << " " << cur.second->value << std::endl;
-		}
-	}
-	catch (const std::exception & e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-}
