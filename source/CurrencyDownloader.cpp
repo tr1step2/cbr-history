@@ -34,7 +34,7 @@ void cbr::CurrencyDownloader::download_file(const char * url_path, const char * 
 	//read response. 
 	// [0] status string
 	// [1] headers
-	// [2] bosy
+	// [2] body
 	std::vector<std::string> response = readAllData();
 	if ( response.size() != 3 )
 		throw std::runtime_error("Error in response structure.");
@@ -58,28 +58,26 @@ std::vector<std::string> cbr::CurrencyDownloader::readAllData()
 	if ( err != boost::asio::error::eof )
 		throw boost::system::system_error( err );
 
+	std::vector<std::string> result;
+	
 	std::stringstream ss;
 	ss << &resp;
 	std::string str = ss.str();	
 
+	//status line
 	auto statusEnd = str.find("\r\n");
 	if ( std::string::npos == statusEnd )
 		throw std::runtime_error( "Wrong answer structure. Can't find status line end." );
-
-	std::vector<std::string> result;
-	result.push_back( str.substr( 0, statusEnd ) );
-
+	result.push_back(str.substr(0, statusEnd));
+	
+	//headers
 	auto headersEnd = str.find("\r\n\r\n");
 	if ( std::string::npos == headersEnd )
 		throw std::runtime_error( "Wrong answer structure. Can't find headers end." );
+	result.push_back( str.substr( statusEnd + 2, (headersEnd - statusEnd + 2) ) );
 
-	result.push_back( str.substr( statusEnd + 2, headersEnd ) );
-
-	auto bodyEnd = str.find_last_of( "\r\n\r\n" );
-	if ( std::string::npos == bodyEnd )
-		throw std::runtime_error( "Wrong answer structure. Can't find headers end." );
-
-	result.push_back( str.substr(headersEnd + 4, bodyEnd) );
+	//body
+	result.push_back( str.substr(headersEnd + 4) );
 
 	return result;
 }
